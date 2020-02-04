@@ -14,4 +14,6 @@ COPY . /home/node/app
 
 EXPOSE 3000
 
+CMD sequelize db:migrate
+
 CMD node app.js
