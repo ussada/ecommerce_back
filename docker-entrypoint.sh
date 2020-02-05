@@ -2,4 +2,6 @@
 
 npx sequelize-cli db:migrate
 
-npm start
+npx sequelize-cli db:seed:all
+
+node app.js

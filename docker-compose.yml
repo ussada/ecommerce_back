@@ -2,6 +2,7 @@ version: '3'
 
   services:
     nodejs:
+      image: ecommerce_back
       container_name: ecommerce_back
       build: '.'
       external_link: 
