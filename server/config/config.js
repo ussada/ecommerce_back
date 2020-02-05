@@ -8,8 +8,6 @@ const dialectOptions = {
 }
 
 const define = {
-  charset: 'utf8',
-  collate: 'utf8_unicode_ci',
   createdAt: 'create_datetime',
   updatedAt: 'modify_datetime'
 }
