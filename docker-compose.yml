@@ -1,0 +1,11 @@
+version: '3'
+
+  services:
+    nodejs:
+      container_name: ecommerce_back
+      build: '.'
+      external_link: 
+        - mysql
+      ports:
+        - '3001:3000'
+      entrypoint: node_modules/.bin/sequelize db:migrate

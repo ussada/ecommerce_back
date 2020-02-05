@@ -14,4 +14,8 @@ COPY . /home/node/app
 
 EXPOSE 3000
 
-CMD node app.js
+COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+
+RUN chmod +x /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
