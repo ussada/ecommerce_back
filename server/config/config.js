@@ -2,14 +2,18 @@ require('dotenv').config();
 const fs = require('fs');
 
 const dialectOptions = {
-  charset: 'utf8',
-  collate: 'utf8_unicode_ci',
+  // charset: 'utf8',
+  // collate: 'utf8_unicode_ci',
   bigNumberStrings: true
 }
 
 const define = {
   createdAt: 'create_datetime',
   updatedAt: 'modify_datetime'
+}
+
+const options = {
+  logging: false
 }
 
 module.exports = {
@@ -20,6 +24,7 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'mysql',
+    ...options,
     dialectOptions,
     define
   },
@@ -30,6 +35,7 @@ module.exports = {
     host: '127.0.0.1',
     port: process.env.CI_DB_PORT,
     dialect: 'mysql',
+    ...options,
     dialectOptions,
     define
   },
@@ -40,6 +46,7 @@ module.exports = {
     host: process.env.PROD_DB_HOSTNAME,
     port: process.env.PROD_DB_PORT,
     dialect: 'mysql',
+    ...options,
     dialectOptions,
     define
   },

@@ -1,5 +1,6 @@
 module.exports = (app) => {
     const auth = require('../controllers/auth');
+    const base64Decode = require('../services/util.service').base64Decode;
     
     app.get('/api', (req, res) => {
         return res.status(200).send({
@@ -21,16 +22,30 @@ module.exports = (app) => {
             
             switch(req.method) {
                 case "GET": 
-                    controller.callMethod('get', req.params.param, res);
+                    let param;
+                    
+                    if (req.params.param) {
+                        try {
+                            param = JSON.parse(base64Decode(req.params.param));
+                            // param = JSON.parse(req.params.param);
+                        }
+                        catch (e) {
+                            param = '';
+                        }
+                    }
+                    else
+                        param = '';
+
+                    controller.callMethod('get', param, res);
                     break;
                 case "POST":
-                    controller.callMethod('create', req.body.param, res);
+                    controller.callMethod('create', req.body, res);
                     break;
                 case "PUT":
-                    controller.callMethod('update', req.body.param, res);
+                    controller.callMethod('update', req.body, res);
                     break;
                 case "DELETE":
-                    controller.callMethod('delete', req.body.param, res);
+                    controller.callMethod('delete', req.body, res);
                     break;
             }
         }

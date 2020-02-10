@@ -27,7 +27,17 @@ module.exports = {
 const createData = (controllerName, param) => {
     return new Promise((resolve, reject) => {
         const controller = getController(controllerName);
-        const method = Array.isArray(param) ? 'bulkCreate' : 'create';
+        let method = '';
+
+        if (Array.isArray(param)) {
+            method = 'bulkCreate';
+            param = {
+                data: param
+            }
+        }
+        else
+            method = 'create';
+
         controller[method](param, (err, result) => {
             if (err)
                 return reject(err);
@@ -77,6 +87,16 @@ const permissionData = [
         permit_key: 'product',
         permit_module: 'product',
         permit_icon: 'list_alt'
+    },
+    {
+        permit_type: 'R',
+        name_en: 'Dashboard',
+        name_th: 'Dashboard',
+        permit_path: '/dashboard',
+        permit_order: 1000,
+        permit_key: 'dashboard',
+        permit_module: '',
+        permit_icon: 'dashboard'
     },
 ]
 

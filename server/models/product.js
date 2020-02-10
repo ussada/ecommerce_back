@@ -8,16 +8,20 @@ module.exports = function(sequelize, DataTypes) {
 			field: 'prod_id'
 		},
 		cat_id: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
+			type: DataTypes.INTEGER
         },
         prod_name: {
-            type: DataTypes.STRING(100),
+			type: DataTypes.STRING(100),
             allowNull: false,
             defaultValue: ''
 		},
 		prod_price: {
 			type: DataTypes.DECIMAL(10,2),
+			allowNull: false,
+			defaultValue: 0.00
+		},
+		prod_qty: {
+			type: DataTypes.INTEGER,
 			allowNull: false,
 			defaultValue: 0
 		},

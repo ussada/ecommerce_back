@@ -63,14 +63,14 @@ const requireJwtAuth = (req, res, next) => {
             }
             if (!result) {
                 return res.json({
-                    status: 'error',
+                    success: false,
                     error: 'Unauthorized user'
                 });
             }
 
             if (!result.success) {
                 return res.json({
-                    status: 'error',
+                    success: false,
                     error: result.error
                 });
             }

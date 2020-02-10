@@ -1,5 +1,7 @@
+// const user = require('../controllers')('user');
+
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('role', {
+	const role = sequelize.define('role', {
 		id: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
@@ -16,8 +18,10 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING(1),
             allowNull: false,
             defaultValue: 'A'
-        }        
+		}
 	}, {
-		tableName: 'tbl_role'
+		tableName: 'tbl_role',
 	});
+
+	return role;
 };

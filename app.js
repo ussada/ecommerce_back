@@ -47,4 +47,4 @@ app.set('port', port);
 var server = http.createServer(app);
 server.listen(port, () => console.log('Server start on port ' + port));
 
-module.exports = app;
+module.exports = server;

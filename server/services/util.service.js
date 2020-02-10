@@ -40,7 +40,7 @@ exports.cryptPassword = function(password) {
     });
 };
  
- exports.comparePassword = function(passPlain, passHash) {
+exports.comparePassword = function(passPlain, passHash) {
     return new Promise((resolve, reject) => {
         bcrypt.compare(passPlain, passHash, function(err, isPasswordMatch) {
             if (err)
@@ -50,3 +50,11 @@ exports.cryptPassword = function(password) {
         });
     })
 };
+
+exports.base64Encode = (s) => {
+    return new Buffer(s).toString('base64');
+  }
+  
+exports.base64Decode = (s) => {
+    return new Buffer(s, 'base64').toString('ascii');
+}

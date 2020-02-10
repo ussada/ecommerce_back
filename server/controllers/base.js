@@ -16,10 +16,11 @@ class BaseController {
         Object.keys(model.associations).forEach(key => {
             let obj = {
                 model: db[key],
-                as: key
+                as: key,
+                fk: model.associations[key].foreignKey
             };
-
-            this.associationList.push(obj);            
+            
+            this.associationList.push(obj);          
         });
     }
 
@@ -40,8 +41,10 @@ class BaseController {
 
     bulkCreate(param, callback) {
         db.sequelize.transaction().then(t => {
-            this._model.bulkCreate(param, {                
+            const {data, op} = param;
+            this._model.bulkCreate(data, {                
                 // include: this.associationList,
+                ...op,
                 transaction: t
             }).then(function(result) {
                 t.commit();
@@ -108,7 +111,7 @@ class BaseController {
                     let item = this.associationList.filter(item => item.as === key);
                     if (typeof item !== 'undefined' && item.length > 0) {                        
                         if (typeof filter[key] !== 'undefined' && filter[key].length > 0) item[0].attributes = filter[key];
-                        inc.push(item[0]);
+                        inc.push(item[0].as);
                     }
                 });
             }
@@ -143,9 +146,68 @@ class BaseController {
                 });
             }
 
+            let associationList = this.associationList;
+
             this._model.update(attr, {
                 where: con
             }).then(function(result) {
+                // Association (take action if found id in condition)
+                if (con.hasOwnProperty('id')) {
+                    let fkId = con.id;
+                    Object.keys(attr).map(name => {
+                        let associated = associationList.find(item => item.as === name);
+                        
+                        if (associated) {
+                            let data = attr[name];
+                            let updateParams = [];
+                            let deleteParams = [];
+                            let fk = associated.fk;
+
+                            data.map(item => {
+                                const {flag, ...param} = item;
+                                
+                                switch(flag) {
+                                    case 'add':
+                                    case 'update':
+                                        updateParams.push({
+                                            ...param,
+                                            [fk]: fkId
+                                        });
+                                        break;
+
+                                    case 'delete':
+                                        if (param.id)
+                                            deleteParams.push(param.id);
+
+                                        break;
+                                }
+                            })
+                            
+                            const associatedModel = new BaseController(associated.model);
+
+                            if (updateParams.length > 0) {
+                                let updateDupFields = Object.keys(associated.model.tableAttributes).filter(name => !['id', fk].includes(name)).map(name => name);
+                                let param = {
+                                    data: updateParams,
+                                    op: {
+                                        updateOnDuplicate: updateDupFields
+                                    }
+                                }
+                                associatedModel.bulkCreate(param, res => console.log(res));
+                            }
+
+                            if (deleteParams.length > 0) {
+                                let param = {
+                                    con: {
+                                        id: deleteParams
+                                    }
+                                }
+                                associatedModel.delete(param, res => console.log(res));
+                            }
+                        }
+                    })
+                }
+                
                 let rowUpdate = result[0];
                 callback(null, [{"rowUpdate": rowUpdate}]);
             }).catch(function(err) {
@@ -160,26 +222,30 @@ class BaseController {
             var condition = param['con'];
 
             // Conditions            
-            if (typeof condition !== 'undefined' && !condition.length) {                
-                Object.keys(condition).forEach(name => {                
-                    con[name] = condition[name];
+            if (typeof condition !== 'undefined' && !condition.length) {
+                let tableAttributes = Object.keys(this._model.tableAttributes);
+                Object.keys(condition).forEach(name => {
+                    if (tableAttributes.includes(name)) // Allow condition if it found in tables
+                        con[name] = condition[name];
                 });
             }
-
-            this._model.destroy({
-                where: con
-            }).then(function(result) {
-                let rowDelete = result;
-                callback(null, [{"rowDelete": rowDelete}]);
-            }).catch(function(err) {
-                callback(err, null);
-            });
+            
+            // Prevent delete all rows (allow delete if found at least 1 condition)
+            if (con && con !== null && Object.keys(con).length > 0) {
+                this._model.destroy({
+                    where: con
+                }).then(function(result) {
+                    let rowDelete = result;
+                    callback(null, [{"rowDelete": rowDelete}]);
+                }).catch(function(err) {
+                    callback(err, null);
+                });
+            }
         }
     }
 
-    callMethod(method, params, res) {
+    callMethod(method, param, res) {
         const response = require('../services/util.service');
-        var param = params && ((Array.isArray(params) && params.length > 0) || Object.keys(params).length > 0) ? JSON.parse(params) : {};
         
         if (method === 'create' && Array.isArray(param))
             method = 'bulkCreate';

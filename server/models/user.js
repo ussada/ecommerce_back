@@ -16,13 +16,11 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		username: {
 			type: DataTypes.STRING(50),
-			allowNull: false,
-			defaultValue: ''
+			allowNull: false
         },
         passwd: {
-            type: DataTypes.STRING(255),
-            allowNull: false,
-            defaultValue: ''
+			type: DataTypes.STRING(255),
+            allowNull: false
 		},
 		role_id: {
 			type: DataTypes.INTEGER
@@ -58,15 +56,6 @@ module.exports = function(sequelize, DataTypes) {
 				console.log(err);
 		});
 	});
-
-	user.beforeFind(options => {
-		
-		options.attributes = {
-			// exclude: ['passwd']
-		}
-		
-		return options;
-	})
 
 	return user;
 };

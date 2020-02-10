@@ -13,12 +13,12 @@ module.exports = function(sequelize, DataTypes) {
 			defaultValue: ''
 		},
 		name_en: {
-			type: DataTypes.STRING(50),
+			type: DataTypes.STRING(100),
 			allowNull: false,
 			defaultValue: ''
 		},
 		name_th: {
-			type: DataTypes.STRING(50),
+			type: DataTypes.STRING(100),
 			allowNull: false,
 			defaultValue: ''
 		},
