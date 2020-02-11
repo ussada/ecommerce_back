@@ -22,6 +22,16 @@ ENV DB_PORT $secrets.DB_PORT
 
 ENV API_ACCESS_KEY $secrets.API_ACCESS_KEY
 
+RUN echo DB_HOST
+
+RUN echo DB_USER
+
+RUN echo DB_PASSWORD
+
+RUN echo DB_PORT
+
+RUN echo API_ACCESS_KEY
+
 RUN npm test
 
 EXPOSE 3000

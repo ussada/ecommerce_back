@@ -10,6 +10,7 @@ const login = ({request, it, expect}, callback) => {
             .set('Content-Type', 'application/json')
             .send(param)
             .end((err, res) => {
+                console.log(res.body)
                 expect(res).to.have.status(200);
                 expect(res.body.success).to.equal(true);
                 expect(res.body.data).to.have.property('token');
