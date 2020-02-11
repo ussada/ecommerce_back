@@ -14,7 +14,7 @@ COPY . /home/node/app
 
 RUN npm test
 
-RUN rm .env
+RUN rm /home/node/app/.env
 
 EXPOSE 3000
 
