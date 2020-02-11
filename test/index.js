@@ -1,10 +1,13 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const {after, before, describe, it} = require('mocha');
+const {after, before, describe, it, reporters} = require('mocha');
 const server = require('../app');
 
 chai.use(chaiHttp);
 const expect = chai.expect;
+
+reporters.Base.symbols.ok = "[PASS]";
+reporters.Base.symbols.err = "[FAIL]";
 
 var accessToken = '';
 var user_id = 0;

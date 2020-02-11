@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --colors test/",
+    "test": "./node_modules/.bin/mocha --no-colors test/",
+    "test_local": "./node_modules/.bin/mocha --colors test/",
     "start": "nodemon app.js",
     "start-prod": "NODE_ENV=production node app.js"
   },
