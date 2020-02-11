@@ -2,8 +2,8 @@ require('dotenv').config();
 const fs = require('fs');
 
 const dialectOptions = {
-  charset: 'utf8',
-  collate: 'utf8_unicode_ci',
+  // charset: 'utf8',
+  // collate: 'utf8_unicode_ci',
   bigNumberStrings: true
 }
 
