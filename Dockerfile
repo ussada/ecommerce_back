@@ -12,15 +12,15 @@ RUN npm install
 
 COPY . /home/node/app
 
-ENV DB_HOST ${{secrets.DB_HOST}}
+ENV DB_HOST ${secrets.DB_HOST}
 
-ENV DB_USER ${{secrets.DB_USER}}
+ENV DB_USER ${secrets.DB_USER}
 
-ENV DB_PASSWORD ${{secrets.DB_PASSWORD}}
+ENV DB_PASSWORD ${secrets.DB_PASSWORD}
 
-ENV DB_PORT ${{secrets.DB_PORT}}
+ENV DB_PORT ${secrets.DB_PORT}
 
-ENV API_ACCESS_KEY ${{secrets.API_ACCESS_KEY}}
+ENV API_ACCESS_KEY ${secrets.API_ACCESS_KEY}
 
 RUN npm test
 
