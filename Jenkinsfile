@@ -13,7 +13,6 @@ node {
     }
 
     stage('Build image') {
-        sh 'rm .env'
         sh 'docker build -t ecommerce_back .'
     }
     

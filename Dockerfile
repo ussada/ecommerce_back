@@ -14,6 +14,8 @@ COPY . /home/node/app
 
 RUN npm test
 
+RUN rm .env
+
 EXPOSE 3000
 
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
