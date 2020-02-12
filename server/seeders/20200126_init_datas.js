@@ -72,10 +72,10 @@ const permissionData = [
         permit_type: 'M',
         name_en: 'Category Management',
         name_th: 'จัดการหมวดสินค้า',
-        permit_path: '/product_category',
+        permit_path: '/category',
         permit_order: 3010,
-        permit_key: 'product_category',
-        permit_module: 'product_category',
+        permit_key: 'category',
+        permit_module: 'category',
         permit_icon: 'category'
     },
     {
