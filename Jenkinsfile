@@ -3,7 +3,7 @@ node {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], 
             doGenerateSubmoduleConfigurations: false, extensions: [], 
             submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'ussada.a', 
-            url: 'https://github.com/ussada/e-commerceback.git']]])
+            url: 'https://github.com/ussada/ecommerce_back.git']]])
     }
     
     stage('Load test environment') {
