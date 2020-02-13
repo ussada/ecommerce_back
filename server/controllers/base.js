@@ -82,8 +82,8 @@ class BaseController {
             condition = param['con'];
             
             // Retreiving fields (master)
-            if (typeof param['attr'] !== 'undefined' && param['attr'].length > 0) attr = param['attr'];
-
+            if (typeof param['attr'] !== 'undefined' && (Object.keys(param['attr']).length > 0 || param['attr'].length > 0)) attr = param['attr'];
+            console.log(attr)
             // Conditions            
             if (typeof condition !== 'undefined' && !condition.length) {                
                 Object.keys(condition).forEach(name => {                
