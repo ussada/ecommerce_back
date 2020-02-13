@@ -7,7 +7,7 @@ const tokenExpiresIn = 600; // second
 const refreshTokenExpiresIn = 7 * 24 * 60 * 60;
 
 const controllerList = [
-    'user', 'role', 'permission'
+    
 ];
 
 const exceptAuth = [
