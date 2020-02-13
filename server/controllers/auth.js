@@ -194,18 +194,23 @@ const refresh = (req, res) => {
 
 const logout = (req, res) => {
     let user_id = req.body.user_id;
-    const con = {
-        con: {
-            user_id
-        }
-    };
 
-    userSessionController.delete(con, (err, result) => {
-        if (typeof result === 'undefined' || result.length === 0) response.ReE(res, 'Invalid token', 401);
-        else {
-            response.ReS(res, 'Logout successful', res.statusCode);
-        }
-    })
+    if (user_id && user_id > 0) {
+        const con = {
+            con: {
+                user_id
+            }
+        };
+    
+        userSessionController.delete(con, (err, result) => {
+            if (typeof result === 'undefined' || result.length === 0) response.ReE(res, 'Invalid token', 401);
+            else {
+                response.ReS(res, 'Logout successful', res.statusCode);
+            }
+        });
+    }
+    else
+        response.ReE(res, 'Not found user', 404);
 }
 
 module.exports = {
