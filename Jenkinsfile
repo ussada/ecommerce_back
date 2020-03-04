@@ -8,8 +8,8 @@ node {
     
     stage('Load test environment') {
         withCredentials([file(credentialsId: 'test_env', variable: 'TEST_ENV'),
-            file(credentialsId: 'SSL_KEY', variable: 'ssl_key'),
-            file(credentialsId: 'SSL_CERT', variable: 'ssl_cert')
+            file(credentialsId: 'ssl_key', variable: 'SSL_KEY'),
+            file(credentialsId: 'ssl_key', variable: 'SSL_CERT')
         ]) {
             sh "cp \$TEST_ENV .env"
             sh 'mkdir -p security'
