@@ -12,7 +12,7 @@ RUN npm install
 
 COPY . /home/node/app
 
-RUN npm test
+# RUN npm test
 
 RUN rm /home/node/app/.env
 
