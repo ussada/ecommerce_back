@@ -31,7 +31,7 @@ node {
         ]) {
             sh 'docker stop ecommerce_back || true'
             sh 'docker rm ecommerce_back || true'
-            sh 'docker run --name ecommerce_back -e DB_HOST=$DB_HOST -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_NAME=$DB_NAME -e DB_PORT=$DB_PORT -e API_ACCESS_KEY=$API_ACCESS_KEY --network=ecommerce_db -p 3000:3000 -d ecommerce_back'                
+            sh 'docker run --name ecommerce_back -e DB_HOST=$DB_HOST -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_NAME=$DB_NAME -e DB_PORT=$DB_PORT -e API_ACCESS_KEY=$API_ACCESS_KEY --network=ecommerce_db -p 3000:3000 -p 3005:3005 -d ecommerce_back'                
         }
     }
     
