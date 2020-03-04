@@ -9,12 +9,11 @@ node {
     stage('Load test environment') {
         withCredentials([file(credentialsId: 'test_env', variable: 'TEST_ENV'),
             file(credentialsId: 'ssl_key', variable: 'SSL_KEY'),
-            file(credentialsId: 'ssl_key', variable: 'SSL_CERT')
+            file(credentialsId: 'ssl_cert', variable: 'SSL_CERT')
         ]) {
             sh "cp \$TEST_ENV .env"
-            sh 'mkdir -p security'
-            sh 'cp \$SSL_KEY /security'
-            sh 'cp \$SSL_CERT /security'
+            sh "cp \$SSL_KEY cert.key"
+            sh "cp \$SSL_CERT cert.pem"
         }
     }
 

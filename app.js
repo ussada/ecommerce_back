@@ -25,8 +25,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // });
 
 var fs = require('fs');
-var privateKey  = fs.readFileSync('./security/cert.key');
-var certificate = fs.readFileSync('./security/cert.pem');
+var privateKey  = fs.readFileSync('cert.key');
+var certificate = fs.readFileSync('cert.pem');
 
 var credentials = {key: privateKey, cert: certificate};
 
