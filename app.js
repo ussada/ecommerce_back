@@ -4,7 +4,7 @@ var express = require('express');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var http = require('http');
-var https = require('https');
+// var https = require('https');
 var compression = require('compression');
 var cors = require('cors');
 
@@ -24,11 +24,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //     console.log(err, 'DB NG');
 // });
 
-var fs = require('fs');
-var privateKey  = fs.readFileSync('cert.key');
-var certificate = fs.readFileSync('cert.pem');
+// var fs = require('fs');
+// var privateKey  = fs.readFileSync('cert.key');
+// var certificate = fs.readFileSync('cert.pem');
 
-var credentials = {key: privateKey, cert: certificate};
+// var credentials = {key: privateKey, cert: certificate};
 
 app.options('*', cors());
 
@@ -53,8 +53,8 @@ var httpPort = 3000;
 var httpServer = http.createServer(app);
 httpServer.listen(httpPort, () => console.log('HTTP server start on port ' + httpPort));
 
-var httpsPort = 3005;
-var httpsServer = https.createServer(credentials, app);
-httpsServer.listen(httpsPort, () => console.log('HTTPS server start on port ' + httpsPort));
+// var httpsPort = 3005;
+// var httpsServer = https.createServer(credentials, app);
+// httpsServer.listen(httpsPort, () => console.log('HTTPS server start on port ' + httpsPort));
 
 module.exports = httpServer;
