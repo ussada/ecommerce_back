@@ -40,11 +40,16 @@ get:
     "field2": ""
   },
   "include": {
-    "detail1": [
-      "field1",
-      "field2"
-    ],
-    "detail2": []
+    "detail1": "detail1",
+    {
+      "key": "detail2",
+      "attr": ["field1", "field2"],
+      "con": {
+        "field1": "",
+	"field2": ""
+      },
+      include: []
+    }
   }
 }
 
