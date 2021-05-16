@@ -72,60 +72,72 @@ class BaseController {
             return value;
     }
 
-    get(param, callback) {
-        var attr = '';
-        var condition = '';
-        var con = {};
-        var inc = [];
+    _setSearchOptions(options = {}) {
+        const {attr = '', con = {}, include = []} = options;
 
-        if (Object.keys(param).length !== 0) {        
-            condition = param['con'];
-            
-            // Retreiving fields (master)
-            if (typeof param['attr'] !== 'undefined' && (Object.keys(param['attr']).length > 0 || param['attr'].length > 0)) attr = param['attr'];
-            console.log(attr)
-            // Conditions            
-            if (typeof condition !== 'undefined' && !condition.length) {                
-                Object.keys(condition).forEach(name => {                
-                    //let dataType = this._model.tableAttributes[name].type.key;                    
-                    let paramValue = '';
-                    //let searchLike = false;
-                    let op = '';
-                    
-                    if (typeof condition[name] !== 'object') paramValue = condition[name];
-                    else {
-                        condition[name].hasOwnProperty('value') ? paramValue = condition[name].value : null;
-                        condition[name].hasOwnProperty('op') ? op = condition[name].op : null;                                            
-                    }
+        // Attributes
+        let attributes = '';
 
-                    if (paramValue !== null && paramValue !== '')
-                            con[name] = this.setCondition(paramValue, op);
-                });
-            }
-            
-            // Include associations
-            let filter = param['include'];
+        // if (Object.keys(param['attr']).length > 0 || param['attr'].length > 0)
+            attributes = attr;
 
-            if (typeof filter !== 'undefined' && !filter.length) { 
-                Object.keys(filter).forEach(key => {
-                    let item = this.associationList.filter(item => item.as === key);
-                    if (typeof item !== 'undefined' && item.length > 0) {                        
-                        if (typeof filter[key] !== 'undefined' && filter[key].length > 0) item[0].attributes = filter[key];
-                        inc.push(item[0].as);
-                    }
-                });
-            }
+        // Conditions
+        let where = {};
+
+        if (!con.length) {                
+            Object.keys(con).forEach(name => {                
+                let paramValue = '';
+                let op = '';
+                
+                if (typeof con[name] !== 'object')
+                    paramValue = con[name];
+                else {
+                    con[name].hasOwnProperty('value') ? paramValue = con[name].value : null;
+                    con[name].hasOwnProperty('op') ? op = con[name].op : null;                                            
+                }
+
+                if (paramValue !== null && paramValue !== '')
+                    where[name] = this.setCondition(paramValue, op);
+            });
         }
+
+        // Include associations
+        let inc = []
+
+        include.map(item => {
+            if (['string', 'object'].includes(typeof item)) {
+                const key = typeof item === 'string' ? item : item.key;
+                const associatedObject = db[key];
+
+                if (associatedObject) {
+                    let otherOptions = {};
+
+                    if (typeof item === 'object')
+                        otherOptions = this._setSearchOptions(item);
+
+                    inc.push({
+                        model: associatedObject,
+                        as: key,
+                        ...otherOptions
+                    });
+                }
+            }
+        });
+
+        return {
+            attributes,
+            where,
+            include: inc
+        }
+    }
+
+    get(param, callback) {
+        const {attributes = '', where = {}, include = []} = this._setSearchOptions(param);
         
         this._model.findAll({
-            attributes: attr,
-            where: con,
-            // where: {
-            //     username: {
-            //         '$like': '%ad%'
-            //     }
-            // },
-            include: inc
+            attributes,
+            where,
+            include
         }).then(function(result) {
             callback(null, result);
         }).catch(function(err) {

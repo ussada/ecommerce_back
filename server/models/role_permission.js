@@ -21,6 +21,7 @@ module.exports = function(sequelize, DataTypes) {
 
 	role_permission.associate = function(models) {
 		models.role.hasMany(role_permission, {
+			model: role_permission,
 			as: 'role_permission',
 			foreignKey: 'role_id',
 			sourceKey: 'id'
@@ -32,6 +33,7 @@ module.exports = function(sequelize, DataTypes) {
         });
         
         models.permission.hasMany(role_permission, {
+			model: role_permission,
 			as: 'role_permission',
 			foreignKey: 'permit_id',
 			sourceKey: 'id'

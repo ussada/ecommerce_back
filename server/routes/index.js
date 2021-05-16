@@ -13,9 +13,9 @@ module.exports = (app) => {
     app.post('/api/auth/logout', auth.logout);
 
     app.use(['/api/:name/:param', '/api/:name'], auth.requireJwtAuth, (req, res) => {
-        const {restrictController, controllerList} = require('../config/global');
+        const {restrictController, controllerList, useDecodeQueryParam = false} = require('../config/global');
         const response = require('../services/util.service');
-
+        
         // Verify controller
         if (!restrictController || controllerList.indexOf(req.params.name) > -1) {
             const controller = require('../controllers')(req.params.name);
@@ -23,11 +23,11 @@ module.exports = (app) => {
             switch(req.method) {
                 case "GET": 
                     let param;
+                    const paramString = req.query.param || '';
                     
-                    if (req.params.param) {
+                    if (paramString !== '') {
                         try {
-                            param = JSON.parse(base64Decode(req.params.param));
-                            // param = JSON.parse(req.params.param);
+                            param = useDecodeQueryParam ? JSON.parse(base64Decode(paramString)) : JSON.parse(paramString);
                         }
                         catch (e) {
                             param = '';

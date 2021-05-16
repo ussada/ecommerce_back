@@ -10,17 +10,24 @@ const extractJwt = require('passport-jwt').ExtractJwt;
 const jwtStrategy = require('passport-jwt').Strategy;
 // define strategy
 const jwtOptions = {
-    jwtFromRequest: extractJwt.fromHeader('authorization'),
+    // jwtFromRequest: extractJwt.fromHeader('authorization'),
+    jwtFromRequest: extractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: require('../config/global').secretKey
 };
+
 const jwtAuth = new jwtStrategy(jwtOptions, (payload, done) => {
     const currTime = new Date().getTime();
 
     if (currTime > payload.exp) {
-        return done(null, {
+        // return done(null, {
+        //     success: false,
+        //     error: 'Token expired'
+        // })
+        return done({
             success: false,
             error: 'Token expired'
-        })
+        }, false)
+        // return done(null, false)
     }
     else {
         const con = {
@@ -59,13 +66,16 @@ const requireJwtAuth = (req, res, next) => {
     return passport.authenticate('jwt', {session:false}, (err, result, info) => {
         if (useAuth) {
             if (err) {
-                return next(err);
+                // return res.status(401).send(err)
+                return res.status(401).send();
             }
+            
             if (!result) {
-                return res.json({
+                return res.status(401).send({
                     success: false,
                     error: 'Unauthorized user'
                 });
+                // return response.ReE(null, err, 401);
             }
 
             if (!result.success) {
@@ -172,14 +182,15 @@ const refresh = (req, res) => {
             refresh_token: refresh_token || ' '
         }
     };
-
+    
     userSessionController.get(con, (err, result) => {
         if (typeof result === 'undefined' || result.length === 0) response.ReE(res, 'Invalid token', 401);
         else {
             let currTime = new Date().getTime();
             let tokenExpiresIn = Number(result[0].expires_in);
 
-            if (currTime > tokenExpiresIn) response.ReE(res, 'Token expires', 401);
+            if (currTime > tokenExpiresIn) 
+                response.ReE(res, 'Invalid token', 401);
             else {
                 userController.get({con: {user_id}}, (err, userResult) => {
                     if (typeof userResult === 'undefined' || userResult === null || userResult.length === 0) response.ReE(res, 'User not found', 401);

@@ -5,6 +5,7 @@ const useAuth = true;
 const secretKey = process.env.API_ACCESS_KEY;
 const tokenExpiresIn = 600; // second
 const refreshTokenExpiresIn = 7 * 24 * 60 * 60;
+const useDecodeQueryParam = false;
 
 const controllerList = [
     
@@ -21,5 +22,6 @@ module.exports = {
     useAuth,
     secretKey,
     tokenExpiresIn,
-    refreshTokenExpiresIn
+    refreshTokenExpiresIn,
+    useDecodeQueryParam
 }
